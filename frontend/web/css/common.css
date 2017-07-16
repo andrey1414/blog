@@ -1,0 +1,42 @@
+.post {
+    margin-bottom: 5px;
+}
+.post_title {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+}
+.post_date {
+    font-size: 12px;
+}
+
+
+.comment {
+    margin-top: 10px;
+}
+
+.comments_title {
+    font-size: 22px;
+    margin-top: 15px;
+}
+
+
+.comment_form_title{
+    margin-top: 15px;
+    font-size: 19px;
+}
+.comment_form{
+    margin-top: 8px;
+}
+
+.input_textarea {
+    max-width: 350px;
+    min-width: 320px;
+}
+
+
+.login_for_comment {
+    font-size: 20px;
+    margin: 30px 0;
+}

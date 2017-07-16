@@ -1,0 +1,59 @@
+CREATE DATABASE blog;
+
+CREATE TABLE IF NOT EXISTS user(
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  img VARCHAR(100),
+  #uid INT(10) UNSIGNED NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (`id`)
+  #INDEX user_uid(uid)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+ALTER TABLE user ADD COLUMN username varchar (100);
+ALTER TABLE user ADD COLUMN email varchar (100);
+ALTER TABLE user ADD COLUMN password_hash varchar (200);
+ALTER TABLE user ADD COLUMN auth_key varchar (200);
+ALTER TABLE user ADD COLUMN status TINYINT UNSIGNED;
+ALTER TABLE user ADD COLUMN created_at INT(11) UNSIGNED;
+ALTER TABLE user ADD COLUMN updated_at INT(11) UNSIGNED;
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS post(
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  #userId INT(10) UNSIGNED NOT NULL,
+  message TEXT NOT NULL,
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  #CONSTRAINT `fk_post_userId_user_id` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  #INDEX post_userId(userId),
+  CONSTRAINT pk_id PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+ALTER TABLE post ADD COLUMN title varchar (100);
+
+
+
+
+CREATE TABLE IF NOT EXISTS comment(
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  postId INT(10) UNSIGNED NOT NULL,
+  userId INT(10) UNSIGNED NOT NULL,
+  message TEXT NOT NULL,
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  #parentId INT(10) UNSIGNED,
+  CONSTRAINT pk_id PRIMARY KEY (`id`),
+  CONSTRAINT `fk_comment_postId_post_id` FOREIGN KEY (`postId`) REFERENCES `post` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `fk_comment_userId_user_id` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  #CONSTRAINT `fk_comment_parentId_comment_id` FOREIGN KEY (`parentId`) REFERENCES `comment` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  #INDEX comment_parentId(parentId)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+
