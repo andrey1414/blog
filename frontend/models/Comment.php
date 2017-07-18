@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-use common\models\Post;
+use frontend\models\Post;
 use common\models\User;
 
 /**

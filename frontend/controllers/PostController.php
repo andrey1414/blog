@@ -7,7 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\Post;
+use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 use \yii\web\Response;
 use frontend\models\Comment;
