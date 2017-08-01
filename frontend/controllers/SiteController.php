@@ -76,11 +76,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $posts = Post::find()
+            ->joinWith('tags')
+            ->orderBy('id desc')
+            ->all();
 
         return $this->render('index', [
-            'posts' => Post::find()->orderBy('id desc')->all()
+            'posts' => $posts
         ]);
-
     }
 
     /**

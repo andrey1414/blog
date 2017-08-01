@@ -20,6 +20,9 @@ use common\models\User;
  */
 class Post extends \yii\db\ActiveRecord
 {
+
+    public $tagsList;
+
     /**
      * @inheritdoc
      */
@@ -35,7 +38,8 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'message'], 'required'],
-            [['title', 'message'], 'string'],
+            [['title', 'message', 'tagsList'], 'string'],
+            ['tagsList', 'filter' , 'filter' => 'trim'],
             [['date'], 'safe'],
         ];
     }
@@ -61,12 +65,20 @@ class Post extends \yii\db\ActiveRecord
         return $this->hasMany(Comment::className(), ['postId' => 'id']);
     }
 
+
     /**
-     * @inheritdoc
-     * @return PostQuery the active query used by this AR class.
+     * @return \yii\db\ActiveQuery
      */
-    public static function find()
+    public function getPostTags()
     {
-        return new PostQuery(get_called_class());
+        return $this->hasMany(PostTag::className(), ['postId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tagId'])->viaTable('postTag', ['postId' => 'id']);
     }
 }

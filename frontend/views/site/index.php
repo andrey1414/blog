@@ -1,6 +1,7 @@
 <?php
 
 use common\widgets\PostWidget;
+use common\widgets\TagsWidget;
 
 /* @var $this yii\web\View */
 
@@ -13,5 +14,12 @@ foreach($posts as $post) {
         'message' => $post->message,
         'date' => $post->date,
         'title' => $post->title,
+        'tags' => $post->tags
     ]);
+
+
+    //echo TagsWidget::widget([
+    //    'tags' => $post->tags,
+    //]);
+
 } ?>

@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -10,8 +11,11 @@ use yii\filters\AccessControl;
 use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 use \yii\web\Response;
-use frontend\models\Comment;
 
+
+use frontend\models\Comment;
+use frontend\models\Tag;
+use frontend\models\PostTag;
 
 
 /**
@@ -61,18 +65,70 @@ class PostController extends Controller
     }
 
 
+
+
     //TODO права доступа
     public function actionCreate()
     {
-
         $post = new Post;
+        $tag = null;
+        $tagsIds = [];
 
-        if ($post->load(Yii::$app->request->post()) && $post->save()) {
-            return $this->redirect(['/']);
+        if ($post->load(Yii::$app->request->post()) && $post->validate()) {
+
+            $transaction = Yii::$app->getDb()->beginTransaction();
+            if ($post->save(false)) {
+                //all tags or one tag
+                $postTagsStr = $post['tagsList'];
+                $tags = explode(',', $postTagsStr);
+                if ($tags === null && $postTagsStr) {
+                    $tags[] = $postTagsStr;
+                }
+
+                //TODO можно вынести отдельно.
+                foreach ($tags as $tagName) {
+                    $tagName = trim($tagName);
+
+                    if ($tagName !== '') {
+                        $tag = Tag::findOne(['name' => $tagName]);
+
+                        if ($tag !== null) {
+                            $tagsIds[] = $tag->id;
+                        } else {
+                            $tag = new Tag;
+                            $tag->name = $tagName;
+                            if ($tag->save()) {
+                                $tagsIds[] = $tag->id;
+                            } else {
+                                $transaction->rollBack();
+                                \Yii::$app->session->addFlash('error', 'Error when save tag');
+
+                                return $this->renderCreateView(['post' => $post]);
+                            }
+                        }
+                    }
+                }
+
+                foreach ($tagsIds as $tagId) {
+                    if(!$this->addPostTag($post->id, $tagId)) {
+                        $transaction->rollBack();
+                        \Yii::$app->session->addFlash('error', 'Error when save id of post and tag.');
+                    }
+                }
+
+
+                $transaction->commit();
+                $this->redirect(['/']);
+
+
+                //TODO translate.
+                \Yii::$app->session->addFlash('success', 'Your message has been added.');
+            } else {
+
+                \Yii::$app->session->addFlash('error', 'Error when save post');
+            }
         }
-        return $this->render('create', [
-            'model' => $post,
-        ]);
+        return $this->renderCreateView(['post' => $post]);
 
     }
 
@@ -84,7 +140,7 @@ class PostController extends Controller
 
         $post = Post::findOne(intval($id));
 
-        if($post && $post->delete())
+        if ($post && $post->delete())
             return ['status' => 200];
         return ['status' => 400];
     }
@@ -93,12 +149,15 @@ class PostController extends Controller
     public function actionView($id)
     {
         $post = Post::findOne($id);
-        if($post === null)
+        if ($post === null)
             throw new NotFoundHttpException('Not found');
 
         $comment = new Comment;
 
-        $comments = $post->getComments()->with('user')->orderBy('id DESC')->all();
+        $comments = $post->getComments()
+            ->with('user')
+            ->orderBy('id DESC')
+            ->all();
 
         return $this->render('view', [
             'post' => $post,
@@ -106,5 +165,17 @@ class PostController extends Controller
             'comments' => $comments
         ]);
 
+    }
+    private function renderCreateView($renderArray)
+    {
+        return $this->render('create', $renderArray);
+
+    }
+    private function addPostTag($postId, $tagId)
+    {
+        $postTag = new PostTag;
+        $postTag->postId = $postId;
+        $postTag->tagId = $tagId;
+        return $postTag->save();
     }
 }

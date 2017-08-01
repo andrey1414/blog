@@ -63,3 +63,24 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 
+CREATE TABLE IF NOT EXISTS tag(
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50),
+  CONSTRAINT pk_tag_id PRIMARY KEY (`id`),
+  CONSTRAINT uk_tag_name UNIQUE KEY (`name`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS postTag(
+  postId INT(10) UNSIGNED NOT NULL,
+  tagId INT(10) UNSIGNED NOT NULL,
+  CONSTRAINT `fk_postTag_postId_post_id` FOREIGN KEY (`postId`) REFERENCES `post` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `fk_postTag_tagId_tag_id` FOREIGN KEY (`tagId`) REFERENCES `tag` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT pk_postTag_postId_tagId PRIMARY KEY (`postId`, `tagId`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+

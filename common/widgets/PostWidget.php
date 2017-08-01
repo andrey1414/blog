@@ -14,6 +14,7 @@ class PostWidget extends Widget
     public $title;
     public $message;
     public $date;
+    public $tags;
 
     public function init()
     {
@@ -29,6 +30,19 @@ class PostWidget extends Widget
             </a>
             <div><?= $this->message; ?></div>
             <div class="post_date"><?= $this->date; ?></div>
+            <div class="post_tags">
+                <?php
+                if ($this->tags !== null) {
+                    foreach ($this->tags as $tag) {
+                        ?>
+                        <a class="tag_name" href="<?= Url::to(['tag', 'name' => $tag->name]); ?>">
+                            <?= $tag->name; ?>
+                        </a>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
             <div class="post_delete"><a href="<?= Url::to(['post/delete', 'id' => $this->id]);?>">Удалить</a></div>
         </div>
         <?php

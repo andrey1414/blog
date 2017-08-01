@@ -13,6 +13,7 @@ echo PostWidget::widget([
     'message' => $post->message,
     'date' => $post->date,
     'title' => $post->title,
+    'tags' => $post->tags,
 ]);
 
 ?>

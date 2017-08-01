@@ -11,11 +11,13 @@ use yii\widgets\ActiveForm;
 <div class="post-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
+    <?= $form->field($post, 'title')->textInput() ?>
+    <?= $form->field($post, 'message')->textarea(['rows' => 6]) ?>
+    <?= $form->field($post,'tagsList')->textInput() ?>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($post->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $post->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 
