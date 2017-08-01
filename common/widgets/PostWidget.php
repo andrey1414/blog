@@ -34,10 +34,11 @@ class PostWidget extends Widget
                 <?php
                 if ($this->tags !== null) {
                     foreach ($this->tags as $tag) {
+                        //<span class="tag_name" href="<?= Url::to(['tag', 'name' => $tag->name]); ? >">
                         ?>
-                        <a class="tag_name" href="<?= Url::to(['tag', 'name' => $tag->name]); ?>">
+                        <span class="tag_name">
                             <?= $tag->name; ?>
-                        </a>
+                        </span>
                         <?php
                     }
                 }
