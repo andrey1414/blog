@@ -19,6 +19,9 @@ $('.comment_form').submit(function(event) {
 
 });
 
+
+//TODO убрать _csrf. Yii2 его должен подставить сам.
+
 $('.comment_delete a').click(function() {
     $.ajax({
         url: $(this).attr('href'),

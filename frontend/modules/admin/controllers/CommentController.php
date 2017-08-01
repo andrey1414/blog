@@ -92,7 +92,6 @@ class CommentController extends Controller
             ]);
         }
     }
-
     /**
      * Deletes an existing Comment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

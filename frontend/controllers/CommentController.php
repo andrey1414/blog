@@ -90,4 +90,21 @@ class CommentController extends Controller
             return ['status' => 200];
         return ['status' => 400];
     }
+
+
+    //TODO права доступа
+    public function actionUpdate($id)
+    {
+        $comment = Comment::findOne(intval($id));
+
+        if ($comment->load(Yii::$app->request->post()) && $comment->save()) {
+            return $this->redirect(['/']);
+        } else {
+            return $this->render('create', [
+                'model' => $comment,
+            ]);
+        }
+    }
+
+
 }
