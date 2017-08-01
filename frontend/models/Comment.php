@@ -72,13 +72,4 @@ class Comment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'userId']);
     }
-
-    /**
-     * @inheritdoc
-     * @return CommentQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new CommentQuery(get_called_class());
-    }
 }
